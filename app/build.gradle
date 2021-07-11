@@ -61,9 +61,12 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+<<<<<<< HEAD
 
      //google billing library
     implementation 'com.android.billingclient:billing:3.0.1'
+=======
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // CardView
@@ -80,6 +83,11 @@ dependencies {
     // CircleImageView
     implementation "de.hdodenhof:circleimageview:$circleImageViewVersion"
 
+<<<<<<< HEAD
+=======
+    //billingclient
+    implementation 'com.android.billingclient:billing:3.0.1'
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
     // Lifecycle
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 

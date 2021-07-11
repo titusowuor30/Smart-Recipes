@@ -32,7 +32,11 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     public void onBind(Recipe recipe) {
+<<<<<<< HEAD
         Uri path = Uri.parse("android.resource://com.example.smartrecipe/drawable/" + recipe.getImage());
+=======
+        Uri path = Uri.parse("android.resource://com.devlab74.foodrecipes/drawable/" + recipe.getImage());
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
         requestManager
                 .load(path)
                 .into(categoryImage);

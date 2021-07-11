@@ -13,11 +13,14 @@
             android:icon="@drawable/ic_categories_foreground"
             android:title="@string/menu_categories" />
 
+<<<<<<< HEAD
 <!--        <item-->
 <!--            android:id="@+id/nav_recipe"-->
 <!--            android:icon="@drawable/ic_recipe_foreground"-->
 <!--            android:title="@string/menu_recipe" />-->
 
+=======
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
         <item
             android:id="@+id/nav_subscription"
             android:icon="@drawable/ic_subscription_foreground"

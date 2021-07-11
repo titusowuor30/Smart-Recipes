@@ -5,7 +5,10 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="testRunner" value="PLATFORM" />
+<<<<<<< HEAD
         <option name="disableWrapperSourceDistributionNotification" value="true" />
+=======
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
@@ -15,7 +18,10 @@
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
+<<<<<<< HEAD
         <option name="useQualifiedModuleNames" value="true" />
+=======
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
       </GradleProjectSettings>
     </option>
   </component>

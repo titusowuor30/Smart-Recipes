@@ -3,8 +3,11 @@
     package="com.example.smartrecipe">
 
     <uses-permission android:name="android.permission.INTERNET" />
+<<<<<<< HEAD
     //google billing permission
     <uses-permission android:name="com.android.vending.BILLING" />
+=======
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
 
     <application
         android:allowBackup="true"
@@ -23,6 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+        <activity
+            android:name="com.example.smartrecipe.ui.subscription.SubscriptionActivity"
+            android:label="@string/subscription"
+            android:theme="@style/Theme.SmartRecipe"/>
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
         <activity android:name=".RecipeListActivity"
             android:theme="@style/Theme.SmartRecipe.NoActionBar"/>
         <activity android:name=".RecipeActivity"

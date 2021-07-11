@@ -1,108 +1,52 @@
-<<<<<<< HEAD
 /*
- * Copyright (c) 2012 Google Inc.
- *@author #offensive TDBSoft
+*
+* @author offensive #TDBSoft
+* This code implements google multiple consumable in app subscriptions
+* using google billing client library
  */
- 
-package com.example.smartrecipe
+package com.example.smartrecipe.ui.subscription;
 
-import android.os.Bundle
-=======
-package com.example.smartrecipe
 
-import android.content.SharedPreferences
-import android.os.Bundle
-import android.view.Menu
->>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
-import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.example.smartrecipe.databinding.ActivityMainBinding
-<<<<<<< HEAD
-import com.google.android.material.navigation.NavigationView
-
-//app billing imports
+//imports
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.view.View
+import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType
+import com.example.smartrecipe.R
 import java.io.IOException
 import java.util.*
 
-public open class MainActivity : AppCompatActivity(), PurchasesUpdatedListener {
-    
-    //app billing variables
-       var arrayAdapter: ArrayAdapter<String>? = null
+class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
+    //initialize billing variables
+    var arrayAdapter: ArrayAdapter<String>? = null
     var listView: ListView? = null
+    var access_home_btn: ImageView? = null
     private var billingClient: BillingClient? = null
-=======
-import com.example.smartrecipe.ui.subscription.SubscriptionActivity
-import com.google.android.material.navigation.NavigationView
-
-open class MainActivity : AppCompatActivity() {
->>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-<<<<<<< HEAD
-        
-        //app billing listview 
+        setContentView(R.layout.subscription_activity)
         listView = findViewById<View>(R.id.listview) as ListView
-=======
->>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.appBarMain.toolbar)
-
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-
-<<<<<<< HEAD
-        
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-////        menuInflater.inflate(R.menu.main, menu)
-//        return true
-//    }
-
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    /////////////////////////app billing functions//////////////////////////////////
-
-  // Establish connection to billing client
+//        supportActionBar?.title = "Subscription"
+        // Establish connection to billing client
         //check purchase status from google play store cache on every app start
         billingClient = BillingClient.newBuilder(this)
-                .enablePendingPurchases().setListener(this).build()
+            .enablePendingPurchases().setListener(this).build()
 
+        //establish a connection to google billing client
         billingClient!!.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    val queryPurchase = billingClient!!.queryPurchases(SkuType.SUBS)
-                    val queryPurchases = queryPurchase.purchasesList
-                    if (queryPurchases != null && queryPurchases.size > 0) {
-                        handlePurchases(queryPurchases)
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {//check if billing client connection is established and returning true
+                    val queryPurchase = billingClient!!.queryPurchases(SkuType.SUBS)//query existing purchases from google sku ids
+                    val queryPurchases = queryPurchase.purchasesList  //get the purcahse list
+                    if (queryPurchases != null && queryPurchases.size > 0) {//check if purchase list exist otherwise return false
+                        handlePurchases(queryPurchases)//call the method to handle purchase query<<<...>>>implemented below in the same code
                     }
 
                     //check which items are in purchase list and which are not in purchase list
@@ -144,7 +88,8 @@ open class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
+            //implement an overide method to retry connecting to billing client in case of disconnection.
+            //the method is in built and is available in the billing api...you only need to call it here
             override fun onBillingServiceDisconnected() {}
         })
 
@@ -164,7 +109,7 @@ open class MainActivity : AppCompatActivity() {
                 initiatePurchase(subcribeItemIDs[position])
             }
             else {
-                billingClient = BillingClient.newBuilder(this@MainActivity).enablePendingPurchases().setListener(this@MainActivity).build()
+                billingClient = BillingClient.newBuilder(this@SubscriptionActivity).enablePendingPurchases().setListener(this@SubscriptionActivity).build()
                 billingClient!!.startConnection(object : BillingClientStateListener {
                     override fun onBillingSetupFinished(billingResult: BillingResult) {
                         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
@@ -180,10 +125,22 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun notifyList() {
+    private fun notifyList()  {
         subscribeItemDisplay.clear()
         for (p in subcribeItemIDs) {
-            subscribeItemDisplay.add("Subscribe Status of " + p + " = " + getSubscribeItemValueFromPref(p))
+            if(getSubscribeItemValueFromPref(p)) {
+                    subscribeItemDisplay.add(
+                        "🔵 " + p.toUpperCase() + " Package Subscription Status " + "[✔]" + "(" + getSubscribeItemValueFromPref(
+                            p
+                        ).toString().replace("true", "active").toUpperCase() + ")"
+                    )
+                }else{
+                    subscribeItemDisplay.add(
+                        "🔴 " + p.toUpperCase() + " Package Subscription Status " + "🔕" + "(" + getSubscribeItemValueFromPref(
+                            p
+                        ).toString().replace("false", "dormant").toUpperCase() + ")"
+                    )
+            }
         }
         arrayAdapter!!.notifyDataSetChanged()
     }
@@ -195,47 +152,11 @@ open class MainActivity : AppCompatActivity() {
             val pref = applicationContext.getSharedPreferences(PREF_FILE, 0)
             return pref.edit()
         }
-=======
-
-
-
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-
-        if (notifyList()) {
-            hideCategories(true)
-        }else{
-            hideCategories(false)
-        }
-        appBarConfiguration = AppBarConfiguration(
-             setOf(
-                R.id.nav_home, R.id.nav_categories, R.id.nav_subscription,
-                R.id.nav_how_it_works, R.id.nav_about
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-    }
-
-    private fun notifyList(): Boolean {
-        var subscribed = false;
-        for (p in SubscriptionActivity.subcribeItemIDs) {
-            if (getSubscribeItemValueFromPref(p)) {
-                subscribed = getSubscribeItemValueFromPref(p)
-                break
-            }
-        }
-        return subscribed
-    }
-    private val preferenceObject: SharedPreferences
-        get() = applicationContext.getSharedPreferences(SubscriptionActivity.PREF_FILE, 0)
->>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
 
     private fun getSubscribeItemValueFromPref(PURCHASE_KEY: String): Boolean {
         return preferenceObject.getBoolean(PURCHASE_KEY, false)
     }
 
-<<<<<<< HEAD
     private fun saveSubscribeItemValueToPref(PURCHASE_KEY: String, value: Boolean) {
         preferenceEditObject.putBoolean(PURCHASE_KEY, value).commit()
     }
@@ -252,24 +173,24 @@ open class MainActivity : AppCompatActivity() {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     if (skuDetailsList != null && skuDetailsList.size > 0) {
                         val flowParams = BillingFlowParams.newBuilder()
-                                .setSkuDetails(skuDetailsList[0])
-                                .build()
-                        billingClient!!.launchBillingFlow(this@MainActivity, flowParams)
+                            .setSkuDetails(skuDetailsList[0])
+                            .build()
+                        billingClient!!.launchBillingFlow(this@SubscriptionActivity, flowParams)
                     }
                     else {
-                        ///////////try to add item/product id "weekly" "monthly" "yearly" inside subscription in google play console////////////////////////
-                        Toast.makeText(applicationContext, "Subscribe Item $PRODUCT_ID not Found", Toast.LENGTH_SHORT).show()
+                        //try to add item/product id "s1" "s2" "s3" inside subscription in google play console
+                        Toast.makeText(applicationContext, "Subscription package $PRODUCT_ID not Found!", Toast.LENGTH_SHORT).show()
                     }
                 }
                 else {
                     Toast.makeText(applicationContext,
-                            " Error " + billingResult.debugMessage, Toast.LENGTH_SHORT).show()
+                        " Error " + billingResult.debugMessage, Toast.LENGTH_SHORT).show()
                 }
             }
         }
         else {
             Toast.makeText(applicationContext,
-                    "Sorry Subscription not Supported. Please Update Play Store", Toast.LENGTH_SHORT).show()
+                "Sorry Subscription not Supported. Please Update Play Store", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -282,7 +203,7 @@ open class MainActivity : AppCompatActivity() {
             val alreadyPurchases = queryAlreadyPurchasesResult.purchasesList
             alreadyPurchases?.let { handlePurchases(it) }
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-            Toast.makeText(applicationContext, "Purchase Canceled", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Purchase Canceled by user", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(applicationContext, "Error " + billingResult.debugMessage, Toast.LENGTH_SHORT).show()
         }
@@ -306,15 +227,15 @@ open class MainActivity : AppCompatActivity() {
                     //if item is purchased/subscribed and not Acknowledged
                     if (!purchase.isAcknowledged) {
                         val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-                                .setPurchaseToken(purchase.purchaseToken)
-                                .build()
+                            .setPurchaseToken(purchase.purchaseToken)
+                            .build()
                         billingClient!!.acknowledgePurchase(acknowledgePurchaseParams
                         ) { billingResult ->
                             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                                 //if purchase is acknowledged
                                 //then saved value in preference
                                 saveSubscribeItemValueToPref(subcribeItemIDs[index], true)
-                                Toast.makeText(applicationContext, subcribeItemIDs[index] + " Item Subscribed", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext, "Subscription for "+ subcribeItemIDs[index] + "package  was succeful!", Toast.LENGTH_SHORT).show()
                                 notifyList()
                             }
                         }
@@ -323,11 +244,11 @@ open class MainActivity : AppCompatActivity() {
                         // Grant entitlement to the user on item purchase
                         if (!getSubscribeItemValueFromPref(subcribeItemIDs[index])) {
                             saveSubscribeItemValueToPref(subcribeItemIDs[index], true)
-                            Toast.makeText(applicationContext, subcribeItemIDs[index] + " Item Subscribed.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "Subscription for "+ subcribeItemIDs[index]  + "package  was succeful!", Toast.LENGTH_SHORT).show()
                             notifyList()
                         }
                     }
-                } 
+                }
                 else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
                     Toast.makeText(applicationContext, subcribeItemIDs[index] + " Purchase is Pending. Please complete Transaction", Toast.LENGTH_SHORT).show()
                 }
@@ -340,9 +261,6 @@ open class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    
-///////////////////////client side verification function///////////////////////
 
     /**
      * Verifies that the purchase was signed correctly for this developer's public key.
@@ -357,8 +275,12 @@ open class MainActivity : AppCompatActivity() {
             // To get key go to Developer Console > Select your app > Development Tools > Services & APIs.
             //for new play console
             //To get key go to Developer Console > Select your app > Monetize > Monetization setup
-            val base64Key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnoQ/+O/X3mVyIhgSDm3iKW31xi6nPnatIDTCiO6KMpHVfGGzIN+UmTgwJDn67Wjhe9w2VVAvdJDx0G+tL96gCs+8CBK/npiSWIpsHX8rWcFE6M37MFV7hgycLzIrP9ixCLDruTJPsD7KUhP+l5up8Dj+0vA40itGaPZfHGk3ImMhykcRdRdKOzrh6n5Hf6ng+1Urv8bZnAnZFX6ipG6kEv/D1R1HO8dhbFuWjqCxWyXPHXks/BlBiFaKPrqWRuAubSd1Q/cYszhk8JaAFAYgS7icqABmRXSvo8CfZIyimcPXIhtlF4ACVS9Ngj3FVn1iThmhmsRi6HesFIdNZbGd8QIDAQAB"
-			Security.verifyPurchase(base64Key, signedData, signature)
+            val base64Key = "Paste the key from monetize setup here. Unique for every app"
+            Security.verifyPurchase(
+                base64Key,
+                signedData,
+                signature
+            )
         } catch (e: IOException) {
             false
         }
@@ -376,44 +298,20 @@ open class MainActivity : AppCompatActivity() {
 
         //note add unique product ids
         //use same id for preference key
-        private val subcribeItemIDs: ArrayList<String> = object : ArrayList<String>() {
+        val subcribeItemIDs: ArrayList<String> = object : ArrayList<String>() { //ann array method to handle the product ids
             init {
-                add("w1")
-                add("m2")
-                add("y3")
+                /*
+                *create your in-app prouct ids>go to monetize>subscriptions>create subscription
+                * and create product ids with the same ids as the ones created below
+                *
+                 */
+                add("standard")
+                add("professional")
+                add("advanced")
             }
         }
         private val subscribeItemDisplay = ArrayList<String>()
     }
 
 
-    ////////////////////////////end of app billing functions//////////////////////////////////////////
-
-        
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_categories,  R.id.nav_subscription,
-                R.id.nav_how_it_works, R.id.nav_about,listView
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-    }
-
-
-=======
-    private fun hideCategories (visibility : Boolean){
-        val navigationView : NavigationView = findViewById(R.id.nav_view)
-        var navMenu :  Menu = navigationView.menu
-        navMenu.findItem(R.id.nav_categories).isVisible = visibility
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
->>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
 }

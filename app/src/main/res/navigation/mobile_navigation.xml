@@ -11,6 +11,7 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
 
+<<<<<<< HEAD
 
         <action
             android:id="@+id/action_nav_home_to_recipeListActivity"
@@ -24,6 +25,16 @@
         android:label="@string/menu_subscription"
         tools:layout="@layout/fragment_subscription" />
 
+=======
+        <action
+            android:id="@+id/action_nav_home_to_subscriptionActivity"
+            app:destination="@id/nav_subscription" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_categories"
+            app:destination="@id/nav_categories" />
+    </fragment>
+
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
         <fragment
         android:id="@+id/nav_how_it_works"
         android:name="com.example.smartrecipe.ui.howItWorks.HowItWorks"
@@ -39,5 +50,14 @@
         android:name="com.example.smartrecipe.RecipeListActivity"
         android:label="activity_recipe_list"
         tools:layout="@layout/activity_recipe_list" />
+<<<<<<< HEAD
+=======
+    <activity
+        android:id="@+id/nav_subscription"
+        android:name="com.example.smartrecipe.ui.subscription.SubscriptionActivity"
+        android:label="subscription_activity"
+        tools:layout="@layout/subscription_activity" >
+    </activity>
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
 
 </navigation>

@@ -9,7 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+<<<<<<< HEAD
         android:orientation="vertical"
+=======
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
         tools:openDrawer="start">
 
 
@@ -30,6 +33,7 @@
             app:headerLayout="@layout/nav_header_main"
             app:menu="@menu/activity_main_drawer" />
 
+<<<<<<< HEAD
             
     <ListView
         android:id="@+id/listview"
@@ -37,5 +41,7 @@
         android:layout_height="match_parent"
         />
 
+=======
+>>>>>>> 16715773b7da518edfb3d99bc1cc586dfe7e17c7
     </androidx.drawerlayout.widget.DrawerLayout>
 
